@@ -158,11 +158,13 @@ public class OffHeapVector implements Vector{
         int p1 = 0;
         int p2 = 0;
         for(; p1<fillLevel && p2 < v.fillLevel; ){
-            if (index(p1) == v.index(p2)) {
-                callback.map(index(p1), value(p1), v.value(p2));
+            int ip1 = index(p1);
+            int ip2 = v.index(p2);
+            if (ip1 == ip2) {
+                callback.map(ip1, value(p1), v.value(p2));
                 p1++;
                 p2++;
-            } else if (index(p1) < v.index(p2)) {
+            } else if (ip1 < ip2) {
                 p1++;
             } else {
                 p2++;

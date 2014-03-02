@@ -19,4 +19,8 @@ public class RandomUtils {
         }
         return res;
     }
+
+    public static int nextInt(int size) {
+        return RND.nextInt(size);
+    }
 }

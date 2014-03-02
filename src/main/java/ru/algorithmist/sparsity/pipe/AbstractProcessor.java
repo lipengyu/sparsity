@@ -15,4 +15,9 @@ public abstract class AbstractProcessor<I, O> implements Processor<I, O> {
     protected ProcessingContext getContext() {
         return context;
     }
+
+    @Override
+    public O cv(I input) throws Exception {
+        return process(input);
+    }
 }

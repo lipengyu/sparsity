@@ -66,7 +66,9 @@ public class OffHeapSparseMatrix implements BasicMatrix {
         for (int i = 0; i < rows; i++) {
             OffHeapVector row = get(i);
             mapper.row = i;
-            row.map(mapper);
+            if (row != null) {
+                row.map(mapper);
+            }
         }
     }
 

@@ -9,6 +9,8 @@ public interface Processor<I,O> {
 
     public O process(I input) throws Exception;
 
+    public O cv(I input) throws Exception;
+
     public void setContext(ProcessingContext context);
 
 }

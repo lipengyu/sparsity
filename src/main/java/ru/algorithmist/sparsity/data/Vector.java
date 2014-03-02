@@ -24,4 +24,5 @@ public interface Vector {
     int[] keys();
 
     float l2norm();
+
 }

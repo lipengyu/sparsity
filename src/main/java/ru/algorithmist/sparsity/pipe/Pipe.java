@@ -59,6 +59,20 @@ public class Pipe <I , O> implements Processor<I, O> {
     }
 
     @Override
+    public O cv(I input) throws Exception {
+        Object i = input;
+        for(Processor p : processors){
+            p.setContext(context);
+            context.getProgressReporter().reportProgress(p.getClass().getSimpleName() + " cv: ", 0);
+            long t0 = System.currentTimeMillis();
+            i = p.cv(i);
+            long t1 = System.currentTimeMillis();
+            context.getProgressReporter().reportProgress(p.getClass().getSimpleName() + " cv complete. Time spent " + (t1-t0), 1);
+        }
+        return (O) i;
+    }
+
+    @Override
     public void setContext(ProcessingContext context) {
         this.context = context;
     }

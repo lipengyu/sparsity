@@ -25,7 +25,7 @@ public class TFIDF extends AbstractProcessor<BasicMatrix,BasicMatrix> {
         input.map(new MatrixMapper() {
             @Override
             public void map(int row, int col, float value) {
-                docCounts.increment(col);
+                docCounts.adjustOrPutValue(col, 1, 1);
             }
         });
         N = input.rows();
@@ -44,8 +44,11 @@ public class TFIDF extends AbstractProcessor<BasicMatrix,BasicMatrix> {
     }
 
 
+
     private float tf(int x) {
-        return (float) Math.log(x + 1);
+//        return x > 0 ? 1f : 0f;
+        return (float) x;
+//        return (float) Math.log(x + 1);
     }
 
 
