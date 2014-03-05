@@ -37,7 +37,7 @@ public class RandomizedSVDTest {
             Matrix reconstr = svd.getU().dot(SparseMatrix.diagonal(res[i])).dot(svd.getV().transpose());
 
             Matrix delta = matrix.add(reconstr.multiply(-1));
-            float residuals = delta.mapReduce(new MatrixMapReducer<Float, Float>() {
+            Float residuals = delta.mapReduce(new MatrixMapReducer<Float, Float>() {
                 @Override
                 public Float map(int row, int col, float value) {
                    return value*value;
@@ -47,6 +47,9 @@ public class RandomizedSVDTest {
                 public Float reduce(Float current, Float value) {
                     if (current == null) {
                         current = 0f;
+                        if (value == null) {
+                            return current;
+                        }
                     }
                     return  current + value;
                 }

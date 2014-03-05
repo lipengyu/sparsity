@@ -121,7 +121,7 @@ public final class SparseMatrix extends AbstractMatrix implements Matrix {
 
 
     public <T, R> R mapReduce(MatrixMapReducer<T, R> callback) {
-        R res = null;
+        R res = callback.reduce(null, null);
         for(Integer r : data.keySet()) {
             SparseVector row = data.get(r);
             for(int c : row.indexes()) {

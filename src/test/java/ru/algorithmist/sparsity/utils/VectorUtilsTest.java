@@ -39,10 +39,6 @@ public class VectorUtilsTest {
         s2.set(1, 1);
         s2.set(2, 0);
 
-        System.out.println("Hamming " + s1.hammingDistance(s2));
-        System.out.println("Hamming " + s2.hammingDistance(s1));
-
-
         assertEquals(1f, VectorUtils.cosineSimilarity(s1, s1));
         assertEquals(1f, VectorUtils.cosineSimilarity(s2, s2));
         assertEquals(-1f, VectorUtils.cosineSimilarity(s2, s1));

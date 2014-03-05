@@ -56,7 +56,7 @@ public class DenseMatrix extends AbstractMatrix {
 
     @Override
     public <T, R> R mapReduce(MatrixMapReducer<T, R> callback) {
-        R res = null;
+        R res = callback.reduce(null, null);
         for(int r = 0; r < rows(); r++) {
             for(int c=0; c<cols(); c++) {
                 res = callback.reduce(res, callback.map(r, c, data[r][c]));

@@ -59,8 +59,6 @@ public class OffHeapVectorTest {
         OffHeapVector v2 = new OffHeapVector(createBuffer(), 10);
         v2.set(3, 1);
         v2.set(4, 1);
-        System.out.println(Arrays.toString(v1.toArray()));
-        System.out.println(Arrays.toString(v2.toArray()));
         double d = VectorUtils.distance(v1, v2);
         assertEquals(2, d*d, 0.00001);
 

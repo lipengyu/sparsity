@@ -45,12 +45,10 @@ public class PipeTest {
     @Test
     public void testComplexPipe() throws Exception {
         Pipe<Iterator<String>, SparseMatrix> pipe = new Pipe<Iterator<String>, Iterator<Iterator<String>>>(new Tokenizer()).add(new Vectorizer());
-        System.out.println(pipe);
         List<String> testSet = new ArrayList<String>();
         testSet.add("hello world");
         testSet.add("hello test");
 
         SparseMatrix sm = pipe.train(testSet.iterator());
-        System.out.println(sm);
     }
 }
