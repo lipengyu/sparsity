@@ -23,6 +23,10 @@ public class DataFrame<P> {
         return predictors.get(row);
     }
 
+    public Vector getData(int row) {
+        return data.get(row);
+    }
+
     public BasicMatrix getData() {
         return data;
     }

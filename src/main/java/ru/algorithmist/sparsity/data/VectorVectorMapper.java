@@ -5,6 +5,6 @@ package ru.algorithmist.sparsity.data;
  */
 public interface VectorVectorMapper {
 
-    public void map(int index, float v1, float v2);
+    public boolean map(int index, float v1, float v2);
 
 }

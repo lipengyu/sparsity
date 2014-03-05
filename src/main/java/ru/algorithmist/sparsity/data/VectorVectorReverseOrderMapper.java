@@ -12,7 +12,7 @@ public class VectorVectorReverseOrderMapper implements VectorVectorMapper {
     }
 
     @Override
-    public void map(int index, float v1, float v2) {
-        base.map(index, v2, v1);
+    public boolean map(int index, float v1, float v2) {
+        return base.map(index, v2, v1);
     }
 }

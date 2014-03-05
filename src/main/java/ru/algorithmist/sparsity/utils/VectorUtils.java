@@ -2,6 +2,9 @@ package ru.algorithmist.sparsity.utils;
 
 import ru.algorithmist.sparsity.data.Vector;
 import ru.algorithmist.sparsity.data.VectorVectorMapper;
+import ru.algorithmist.sparsity.data.bit.BitVector;
+
+import java.util.BitSet;
 
 /**
  * @author Sergey Edunov
@@ -20,13 +23,18 @@ public class VectorUtils {
         return dist.getRes() / (v1.l2norm() * v2.l2norm());
     }
 
+    public static float cosineSimilarity(BitVector s1, BitVector s2) {
+        return (float) Math.cos(s1.hammingDistance(s2) * Math.PI / s1.size());
+    }
+
     private static class CosineSimilarityCalc implements VectorVectorMapper {
 
         private float res;
 
         @Override
-        public void map(int index, float v1, float v2) {
+        public boolean map(int index, float v1, float v2) {
             res += v1*v2;
+            return true;
         }
 
         public float getRes(){
@@ -43,8 +51,9 @@ public class VectorUtils {
         }
 
         @Override
-        public void map(int index, float v1, float v2) {
+        public boolean map(int index, float v1, float v2) {
             res += (v1-v2)*(v1-v2);
+            return true;
         }
     }
 }

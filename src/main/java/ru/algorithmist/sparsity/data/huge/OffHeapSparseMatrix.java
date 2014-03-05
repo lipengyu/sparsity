@@ -18,7 +18,7 @@ import java.nio.file.StandardOpenOption;
 /**
  * @author Sergey Edunov
  */
-public class OffHeapSparseMatrix implements BasicMatrix {
+public final class OffHeapSparseMatrix implements BasicMatrix {
 
     private OffHeapChunk[] data;
     private int rows;

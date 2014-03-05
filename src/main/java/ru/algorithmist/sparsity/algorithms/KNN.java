@@ -39,24 +39,11 @@ public class KNN<P> extends AbstractProcessor<DataFrame<P>, List<List<P>>> {
     @Override
     public List<List<P>> process(final DataFrame<P> input) throws Exception {
         List<List<P>> res = new ArrayList<List<P>>();
-//        List<Future<List<P>>> futures = new ArrayList<Future<List<P>>>();
         int rows = input.getRows();
         for(int i=0; i<input.getRows(); i++){
-            final int row = i;
             getContext().getProgressReporter().reportProgress("KNN", i/(double)rows);
-//            futures.add(ThreadUtils.schedule(new Callable<List<P>>() {
-//                @Override
-//                public List<P> call() throws Exception {
-//                    return closest(input.getData().get(row));
-//                }
-//            }));
-            res.add(closest(input.getData().get(row)));
+            res.add(closest(input.getData(i)));
         }
-//        for(int i=0; i<futures.size(); i++) {
-//            Future<List<P>> future = futures.get(i);
-//            getContext().getProgressReporter().reportProgress("KNN", i/(double)rows);
-//            res.add(future.get());
-//        }
         return res;
     }
 

@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Mutable and not thread safe. Has to be fast (not yet)
  */
-public class SparseMatrix extends AbstractMatrix implements Matrix {
+public final class SparseMatrix extends AbstractMatrix implements Matrix {
 
     private Map<Integer, SparseVector> data = new THashMap<Integer, SparseVector>();
     private int rows;
@@ -91,8 +91,7 @@ public class SparseMatrix extends AbstractMatrix implements Matrix {
         if (col >= cols) {
             cols = col + 1;
         }
-        float old = r.get(col);
-        r.set(col, old + v);
+        r.add(col, v);
     }
 
     @Override
@@ -148,7 +147,12 @@ public class SparseMatrix extends AbstractMatrix implements Matrix {
     }
 
     public SparseVector get(int row) {
-        return data.get(row);
+        SparseVector res = data.get(row);
+        if (res == null) {
+            res = new SparseVector();
+            data.put(row, res);
+        }
+        return res;
     }
 
 

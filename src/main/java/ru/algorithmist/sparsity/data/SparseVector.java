@@ -10,12 +10,13 @@ import gnu.trove.procedure.TIntFloatProcedure;
 import gnu.trove.procedure.TIntProcedure;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
+import ru.algorithmist.sparsity.utils.NumberUtils;
 import ru.algorithmist.sparsity.utils.StringFormat;
 
 import java.util.Set;
 
 
-public class SparseVector implements Vector {
+public final class SparseVector implements Vector {
     //TODO: Not really efficient
     private TIntFloatMap data = new TIntFloatHashMap();
     private int size;
@@ -24,11 +25,19 @@ public class SparseVector implements Vector {
         if (index >= size) {
             size = index+1;
         }
-        data.put(index, value);
+        if (NumberUtils.isZero(value)) {
+            data.remove(index);
+        } else {
+            data.put(index, value);
+        }
     }
 
     public float get(int index) {
         return data.get(index);
+    }
+
+    public void add(int index, float value) {
+        data.adjustOrPutValue(index, value, value);
     }
 
     @Override
@@ -108,8 +117,7 @@ public class SparseVector implements Vector {
         keys.forEach(new TIntProcedure() {
             @Override
             public boolean execute(int value) {
-                callback.map(value, get(value), vector.get(value));
-                return true;
+                return callback.map(value, get(value), vector.get(value));
             }
         });
     }
@@ -126,8 +134,7 @@ public class SparseVector implements Vector {
         keys.forEach(new TIntProcedure() {
             @Override
             public boolean execute(int value) {
-                callback.map(value, get(value), vector.get(value));
-                return true;
+                return callback.map(value, get(value), vector.get(value));
             }
         });
     }

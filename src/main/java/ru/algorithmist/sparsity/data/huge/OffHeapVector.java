@@ -1,6 +1,7 @@
 package ru.algorithmist.sparsity.data.huge;
 
 import ru.algorithmist.sparsity.data.*;
+import ru.algorithmist.sparsity.utils.NumberUtils;
 import ru.algorithmist.sparsity.utils.StringFormat;
 
 import java.nio.MappedByteBuffer;
@@ -9,7 +10,7 @@ import java.util.Arrays;
 /**
  * @author Sergey Edunov
  */
-public class OffHeapVector implements Vector{
+public final class OffHeapVector implements Vector{
 
     public static final int INDEX_PHYSICAL_SIZE = 4;
     public static final int PHYSICAL_SIZE = 4 + INDEX_PHYSICAL_SIZE;
@@ -129,14 +130,20 @@ public class OffHeapVector implements Vector{
         int p2 = 0;
         for(; p1<fillLevel && p2 < v.fillLevel; ){
             if (index(p1) == v.index(p2)) {
-                callback.map(index(p1), value(p1), v.value(p2));
+                if (!callback.map(index(p1), value(p1), v.value(p2))) {
+                    return;
+                }
                 p1++;
                 p2++;
             } else if (index(p1) < v.index(p2)) {
-                callback.map(index(p1), value(p1), 0);
+                if (!callback.map(index(p1), value(p1), 0)) {
+                    return;
+                }
                 p1++;
             } else {
-                callback.map(v.index(p2), 0, v.value(p2));
+                if (!callback.map(v.index(p2), 0, v.value(p2))) {
+                    return;
+                }
                 p2++;
             }
         }
@@ -151,8 +158,24 @@ public class OffHeapVector implements Vector{
 
     @Override
     public void intersect(Vector vector, VectorVectorMapper callback) {
-        if (vector instanceof DenseVector || vector instanceof SparseVector) {
+        if (vector instanceof DenseVector) {
             vector.intersect(this, new VectorVectorReverseOrderMapper(callback));
+            return;
+        }
+        if (vector instanceof SparseVector) {
+            for(int i=0; i<fillLevel; i++) {
+                int ip1 = index(i);
+                float v2 = vector.get(ip1);
+                if (!NumberUtils.isZero(v2)) {
+                    float v1 = value(i);
+                    if (!NumberUtils.isZero(v1)) {
+                        if (!callback.map(ip1, value(i), v2)) {
+                            return;
+                        }
+                    }
+                }
+            }
+            return;
         }
         OffHeapVector v = (OffHeapVector)vector;
         int p1 = 0;
@@ -161,7 +184,13 @@ public class OffHeapVector implements Vector{
             int ip1 = index(p1);
             int ip2 = v.index(p2);
             if (ip1 == ip2) {
-                callback.map(ip1, value(p1), v.value(p2));
+                float v1 = value(p1);
+                float v2 = v.value(p2);
+                if (!NumberUtils.isZero(v1) && !NumberUtils.isZero(v2)) {
+                    if (!callback.map(ip1, v1, v2)) {
+                        return;
+                    }
+                }
                 p1++;
                 p2++;
             } else if (ip1 < ip2) {

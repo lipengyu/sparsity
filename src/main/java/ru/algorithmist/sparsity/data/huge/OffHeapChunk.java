@@ -6,7 +6,7 @@ import java.nio.MappedByteBuffer;
 /**
  * @author Sergey Edunov
  */
-public class OffHeapChunk {
+public final class OffHeapChunk {
 
     private OffHeapVector[] data;
     private MappedByteBuffer buffer;

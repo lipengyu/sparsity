@@ -23,4 +23,12 @@ public class RandomUtils {
     public static int nextInt(int size) {
         return RND.nextInt(size);
     }
+
+    public static double nextDouble() {
+        return RND.nextDouble();
+    }
+
+    public static double nextGaussian() {
+        return RND.nextGaussian();
+    }
 }

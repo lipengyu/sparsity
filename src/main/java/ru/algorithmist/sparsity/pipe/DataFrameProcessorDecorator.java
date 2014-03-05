@@ -26,4 +26,11 @@ public class DataFrameProcessorDecorator<P> extends AbstractProcessor<DataFrame<
         BasicMatrix res = core.process(input.getData());
         return new DataFrame<P>(input.getPredictors(), res);
     }
+
+    @Override
+    public void setContext(ProcessingContext context) {
+        super.setContext(context);
+        core.setContext(context);
+    }
+
 }

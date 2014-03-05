@@ -77,6 +77,10 @@ public class Pipe <I , O> implements Processor<I, O> {
         this.context = context;
     }
 
+    public ProcessingContext getContext() {
+        return context;
+    }
+
     public String toString() {
         StringBuilder res = new StringBuilder();
         res.append("Pipe [");

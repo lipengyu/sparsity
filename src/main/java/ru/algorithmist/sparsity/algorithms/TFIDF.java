@@ -19,6 +19,11 @@ public class TFIDF extends AbstractProcessor<BasicMatrix,BasicMatrix> {
 
     private TIntIntMap docCounts = new TIntIntHashMap();
     private int N;
+    private int lowThreshold;
+
+    public TFIDF(int lowThreshold) {
+        this.lowThreshold = lowThreshold;
+    }
 
     @Override
     public BasicMatrix train(BasicMatrix input) throws Exception {
@@ -53,6 +58,10 @@ public class TFIDF extends AbstractProcessor<BasicMatrix,BasicMatrix> {
 
 
     private float idf(int col){
+        int count = docCounts.get(col);
+        if (count < lowThreshold) {
+           return 0f;
+        }
         return (float) Math.log( N / (1. + docCounts.get(col)));
     }
 }

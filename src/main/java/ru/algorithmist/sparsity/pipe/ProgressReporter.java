@@ -8,4 +8,8 @@ public interface ProgressReporter {
     public void reportProgress(String name, double progress);
 
     public void reportWarning(String s);
+
+    void disable();
+
+    void enable();
 }

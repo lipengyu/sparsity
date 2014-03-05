@@ -78,7 +78,9 @@ public class DenseVector implements Vector {
             float v1 = get(i);
             float v2 = vector.get(i);
             if (v1 != 0 || v2!= 0) {
-                callback.map(i, v1, v2);
+                if (!callback.map(i, v1, v2)) {
+                    return;
+                }
             }
         }
     }
@@ -90,7 +92,9 @@ public class DenseVector implements Vector {
             float v1 = get(i);
             float v2 = vector.get(i);
             if (v1 != 0 && v2!= 0) {
-                callback.map(i, v1, v2);
+                if (!callback.map(i, v1, v2)) {
+                    return;
+                }
             }
         }
     }
