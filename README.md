@@ -4,6 +4,10 @@ This pure Java library implements multiple algorithms for text classification.
 It was initially designed as a part of solution for Kagle competition
 http://kaggle.com/c/facebook-recruiting-iii-keyword-extraction/
 
+This library strives for efficiency, it is not a study platform, hence it is based on off-heap matrix
+implementation and has multi-threading support.
+
+
 This library provides
 ---------------------
 *   Pipe framework for training and validating models with multi-threading and lazy data load support.
