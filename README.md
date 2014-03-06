@@ -6,7 +6,7 @@ http://kaggle.com/c/facebook-recruiting-iii-keyword-extraction/
 
 This library provides
 ---------------------
-*   Pipe framework for training and validating models with lazy data load support.
+*   Pipe framework for training and validating models with multi-threading and lazy data load support.
 *   Efficient Sparse and Dense Matrix implementations. Dense matrices are not primary focus of this library yet, mostly because text data is sparse.
 *   Efficient Off-heap sparse matrix implementation for handling data that doesn't fit into main memory.
 *   Bit matrix.
@@ -19,4 +19,3 @@ Next on the roadmap
 -------------------
 *   Regularized SVD to run PCA on off-heap matrices.
 *   Very Sparse Random Projections
-*   Parallel implementation for Pipe framework

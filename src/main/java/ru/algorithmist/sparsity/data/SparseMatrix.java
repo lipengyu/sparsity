@@ -1,6 +1,8 @@
 package ru.algorithmist.sparsity.data;
 
+import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.THashMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.util.Map;
 
@@ -10,7 +12,8 @@ import java.util.Map;
  */
 public final class SparseMatrix extends AbstractMatrix implements Matrix {
 
-    private Map<Integer, SparseVector> data = new THashMap<Integer, SparseVector>();
+    private TIntObjectMap<SparseVector> data = new TIntObjectHashMap<SparseVector>();
+
     private int rows;
     private int cols;
 
@@ -122,7 +125,7 @@ public final class SparseMatrix extends AbstractMatrix implements Matrix {
 
     public <T, R> R mapReduce(MatrixMapReducer<T, R> callback) {
         R res = callback.reduce(null, null);
-        for(Integer r : data.keySet()) {
+        for(int r : data.keys()) {
             SparseVector row = data.get(r);
             for(int c : row.indexes()) {
                 res = callback.reduce(res, callback.map(r, c, row.get(c)));
@@ -133,7 +136,7 @@ public final class SparseMatrix extends AbstractMatrix implements Matrix {
 
     @Override
     public void map(MatrixMapper callback) {
-        for(Integer r : data.keySet()) {
+        for(int r : data.keys()) {
             SparseVector row = data.get(r);
             for(int c : row.indexes()) {
                 callback.map(r, c, row.get(c));

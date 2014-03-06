@@ -1,17 +1,15 @@
 package ru.algorithmist.sparsity.data;
 
-import java.util.ArrayList;
-import java.util.List;
 /**
  * @author Sergey Edunov
  */
 public class DataFrame<P> {
 
-    private List<P> predictors;
+    private Predictors<P> predictors;
     private BasicMatrix data;
     private int rows;
 
-    public DataFrame(List<P> predictors, BasicMatrix data) {
+    public DataFrame(Predictors<P> predictors, BasicMatrix data) {
         assert predictors.size() == data.rows();
         this.predictors = predictors;
         this.data = data;
@@ -31,7 +29,7 @@ public class DataFrame<P> {
         return data;
     }
 
-    public List<P> getPredictors() {
+    public Predictors<P> getPredictors() {
         return predictors;
     }
 

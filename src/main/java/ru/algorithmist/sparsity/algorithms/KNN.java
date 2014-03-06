@@ -2,18 +2,19 @@ package ru.algorithmist.sparsity.algorithms;
 
 import ru.algorithmist.sparsity.algorithms.similarity.SimilarityMeasure;
 import ru.algorithmist.sparsity.data.*;
-import ru.algorithmist.sparsity.pipe.AbstractProcessor;
+import ru.algorithmist.sparsity.pipe.AbstractParallelProcessor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * @author Sergey Edunov
  */
-public class KNN<P> extends AbstractProcessor<DataFrame<P>, List<List<P>>> {
+public class KNN<P> extends AbstractParallelProcessor<DataFrame<P>, Predictors<Collection<P>>> {
 
-    private List<P> predictors;
+    private Predictors<P> predictors;
     private BasicMatrix data;
     private int n;
     private SimilarityMeasure similarityMeasure;
@@ -24,35 +25,29 @@ public class KNN<P> extends AbstractProcessor<DataFrame<P>, List<List<P>>> {
     }
 
     @Override
-    public List<List<P>> train(DataFrame<P> input) throws Exception {
-        this.predictors = input.getPredictors();
-        this.data = input.getData();
-        List<List<P>> res = new ArrayList<List<P>>();
-        for(P p : predictors){
-            List<P> pl = new ArrayList<P>(1);
-            pl.add(p);
-            res.add(pl);
-        }
+    public Predictors<Collection<P>> train(DataFrame<P> input) throws Exception {
+        Predictors<Collection<P>> res = new Predictors<Collection<P>>(input.getRows());
+        train(input, res, 0);
         return res;
     }
 
     @Override
-    public List<List<P>> process(final DataFrame<P> input) throws Exception {
-        List<List<P>> res = new ArrayList<List<P>>();
+    public Predictors<Collection<P>> process(final DataFrame<P> input) throws Exception {
         int rows = input.getRows();
-        for(int i=0; i<input.getRows(); i++){
+        Predictors<Collection<P>> res = new Predictors<Collection<P>>(rows);
+        for(int i=0; i<rows; i++){
             getContext().getProgressReporter().reportProgress("KNN", i/(double)rows);
-            res.add(closest(input.getData(i)));
+            res.set(i, closest(input.getData(i)));
         }
         return res;
     }
 
     @Override
-    public List<List<P>> cv(DataFrame<P> input) throws Exception {
+    public Predictors<Collection<P>> cv(DataFrame<P> input) throws Exception {
         return train(input);
     }
 
-    private List<P> closest(Vector v){
+    private Collection<P> closest(Vector v){
         IndexedDouble[] distances = new IndexedDouble[predictors.size()];
         for(int i=0; i<distances.length; i++){
             Vector dv = data.get(i);
@@ -83,6 +78,50 @@ public class KNN<P> extends AbstractProcessor<DataFrame<P>, List<List<P>>> {
 
         public String toString() {
             return pos + ":" + value;
+        }
+    }
+
+
+    /**
+     * Parallel implementation below...
+     */
+
+    private int chunks;
+
+    @Override
+    public void setChunks(int n) {
+        chunks = n;
+    }
+
+    @Override
+    public Predictors<Collection<P>> initTrain(DataFrame<P> input) {
+        return new Predictors<Collection<P>>(input.getRows());
+    }
+
+    @Override
+    public Predictors<Collection<P>> initProcess(DataFrame<P> input) {
+        return initTrain(input);
+    }
+
+    @Override
+    public void train(DataFrame<P> input, Predictors<Collection<P>> output, int chunk) throws Exception {
+        if (chunk == 0) { //This is not parallel (doesn't seem to worth it anyway
+            this.predictors = input.getPredictors();
+            this.data = input.getData();
+
+            for(int i=0; i<predictors.size(); i++){
+                Collection<P> pl = Arrays.asList(predictors.get(i));
+                output.set(i,  pl);
+            }
+        }
+    }
+
+    @Override
+    public void process(DataFrame<P> input, Predictors<Collection<P>> output, int chunk) throws Exception {
+        int rows = input.getRows();
+        for(int i=chunk; i<rows; i+=chunks){
+            getContext().getProgressReporter().reportProgress("Parallel KNN", i/(double)rows);
+            output.set(i, closest(input.getData(i)));
         }
     }
 }

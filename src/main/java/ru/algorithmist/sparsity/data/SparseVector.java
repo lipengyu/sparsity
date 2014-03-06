@@ -1,6 +1,7 @@
 package ru.algorithmist.sparsity.data;
 
 
+import gnu.trove.impl.sync.TSynchronizedIntFloatMap;
 import gnu.trove.map.TIntDoubleMap;
 import gnu.trove.map.TIntFloatMap;
 import gnu.trove.map.hash.TIntDoubleHashMap;
@@ -17,11 +18,11 @@ import java.util.Set;
 
 
 public final class SparseVector implements Vector {
-    //TODO: Not really efficient
-    private TIntFloatMap data = new TIntFloatHashMap();
+
+    private TIntFloatMap data = new TSynchronizedIntFloatMap(new TIntFloatHashMap());
     private int size;
 
-    public void set(int index, float value) {
+    public synchronized void set(int index, float value) {
         if (index >= size) {
             size = index+1;
         }
@@ -32,16 +33,16 @@ public final class SparseVector implements Vector {
         }
     }
 
-    public float get(int index) {
+    public synchronized float get(int index) {
         return data.get(index);
     }
 
-    public void add(int index, float value) {
+    public synchronized void add(int index, float value) {
         data.adjustOrPutValue(index, value, value);
     }
 
     @Override
-    public Vector slice(int from, int to) {
+    public synchronized Vector slice(int from, int to) {
         SparseVector res = new SparseVector();
         for(int index : data.keys()) {
             if (index >= from && index < to) {
@@ -52,7 +53,7 @@ public final class SparseVector implements Vector {
     }
 
     @Override
-    public float[] toArray() {
+    public synchronized float[] toArray() {
         final float[] res = new float[size()];
         data.forEachEntry(new TIntFloatProcedure() {
             @Override
