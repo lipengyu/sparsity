@@ -12,9 +12,6 @@ import ru.algorithmist.sparsity.utils.RandomUtils;
  * Based on: Charikar, M. S. (2002). Similarity estimation techniques from rounding algorithms
  * http://www.cs.princeton.edu/courses/archive/spr04/cos598B/bib/CharikarEstim.pdf
  *
- * There is another work: T. Hastie Very Sparse Random Projections
- * http://www.stanford.edu/~hastie/Papers/Ping/KDD06_rp.pdf  but for some reason it didn't work for me
- *
  * Should probably take a look at this work too. Ella Bingham  Random projection in dimensionality reduction: Applications to image and text data
  * http://users.ics.aalto.fi/ella/publications/randproj_kdd.pdf
  *

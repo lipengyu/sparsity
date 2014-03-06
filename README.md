@@ -12,7 +12,7 @@ This library provides
 *   Bit matrix.
 *   KNN algorithm for classification
 *   RandomizedPCA implementation which capable to handle large sparse matrices (it can't handle off-heap matrices though, see roadmap)
-*   Locality Sensitive Hashing implementation using Random Projections
+*   Locality Sensitive Hashing implementation using Random Projections and Very Sparse Random Projections
 
 
 Next on the roadmap

@@ -4,6 +4,9 @@ import ru.algorithmist.sparsity.data.*;
 import ru.algorithmist.sparsity.utils.RandomUtils;
 
 /**
+ * Based on: T Hastie Very Sparse Random Projections
+ * http://www.stanford.edu/~hastie/Papers/Ping/KDD06_rp.pdf
+ *
  * @author Sergey Edunov
  */
 public class VerySparseRandomProjections  extends RandomProjections {
