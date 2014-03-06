@@ -2,6 +2,7 @@ package examples.lshtc;
 
 import ru.algorithmist.sparsity.algorithms.RandomProjections;
 import ru.algorithmist.sparsity.algorithms.TFIDF;
+import ru.algorithmist.sparsity.algorithms.VerySparseRandomProjections;
 import ru.algorithmist.sparsity.data.DataFrame;
 import ru.algorithmist.sparsity.data.MultiClassLabel;
 import ru.algorithmist.sparsity.data.Vector;
@@ -37,8 +38,7 @@ public class RandomProjectionsAccuracy {
 
 
         for(int proj = 3; proj < 10000; proj += proj) {
-
-            ParallelPipe<DataFrame<MultiClassLabel>, DataFrame<MultiClassLabel>> rpPipe = new ParallelPipe<DataFrame<MultiClassLabel>, DataFrame<MultiClassLabel>>(4, new ParallelDataFrameProcessorDecorator<MultiClassLabel>(new RandomProjections(proj)));
+            ParallelPipe<DataFrame<MultiClassLabel>, DataFrame<MultiClassLabel>> rpPipe = new ParallelPipe<DataFrame<MultiClassLabel>, DataFrame<MultiClassLabel>>(4, new ParallelDataFrameProcessorDecorator<MultiClassLabel>(new VerySparseRandomProjections(proj, 10)));
             rpPipe.getContext().getProgressReporter().disable();
 
             DataFrame<MultiClassLabel> trainRP = rpPipe.train(trainExact);

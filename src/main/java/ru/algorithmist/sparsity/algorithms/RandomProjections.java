@@ -24,7 +24,7 @@ import ru.algorithmist.sparsity.utils.RandomUtils;
  */
 public class RandomProjections extends AbstractParallelProcessor<BasicMatrix, BasicMatrix> {
 
-    private int d;
+    protected int d;
     private SparseMatrix RT = new SparseMatrix();
 
     public RandomProjections(int d) {
@@ -78,7 +78,7 @@ public class RandomProjections extends AbstractParallelProcessor<BasicMatrix, Ba
     /**
      * Lazy initialization for random gaussian matrix. We only add columns when we really need them.
      */
-    private void addRandomCol(SparseMatrix res, int col) {
+    protected void addRandomCol(SparseMatrix res, int col) {
         for(int i=0; i<d; i++) {
             double rnd = RandomUtils.nextGaussian();
             res.set(i, col, (float) rnd);
